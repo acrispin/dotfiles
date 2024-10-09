@@ -46,8 +46,10 @@ function mkcd()
 # -------
 # Aliases
 # -------
-alias l="ls" # List files in current directory
-alias ll="ls -al" # List all files in current directory in long list format
+alias l.='ls -alGhd .* --color=auto'
+alias ls='ls -GFh --color'
+alias ll='ls -alGh --color'
+alias lll='find ./  -printf "%f\n"'
 alias o="open ." # Open the current directory in Finder
 
 # ----------------------
