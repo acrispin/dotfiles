@@ -1,3 +1,6 @@
+# Backup default .bash_profile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 source ~/.nvm/nvm.sh
 nvm use stable
 shopt -s autocd

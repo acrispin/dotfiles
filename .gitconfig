@@ -1,7 +1,7 @@
 [user]
-	name = w3cj
-	email = cj@null.computer
-[core]
-	editor = nano
+	name = Antonio Crispin
+	email = antonio.crispin@gmail.com
+# [core]
+# 	editor = nano
 [init]
-	defaultBranch = main
+	defaultBranch = master
