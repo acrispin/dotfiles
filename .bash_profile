@@ -53,8 +53,12 @@ alias o="open ." # Open the current directory in Finder
 # ----------------------
 # Git Aliases
 # ----------------------
-alias gaa='git add .'
-alias gcm='git commit -m'
-alias gpsh='git push'
-alias gss='git status -s'
-alias gs='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
+alias gl="git log --oneline"
+alias glr="git log --format=reference"
+alias glf="git log --pretty='format:%C(auto)%h (%s | %an | %as)'"
+# alias glc="git log --pretty='format:%C(auto)%h (%Cred%s | %Cgreen%an | %Cblue%as)'"
+alias glc="git log --pretty='format:%C(auto)%h (%Cblue%as%Creset | %Cgreen%an%Creset | %Cred%s%Creset) %C(auto)%d'"
+alias gs="git status -bs"
+alias gd="git diff -p --stat"
+alias gt="git tag --sort=-creatordate"
+alias gs2='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
