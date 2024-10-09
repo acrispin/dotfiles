@@ -1,60 +1,69 @@
 # Backup default .bash_profile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-source ~/.nvm/nvm.sh
-nvm use stable
-shopt -s autocd
-shopt -s histappend
 
-export PATH=$PATH:$HOME/bin
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
 
-export HISTSIZE=5000
-export HISTFILESIZE=10000
+# seccion adicionada al final, ubicacion: /home/user/
+# personalizado para mostrar el nombre del branch en un repositorio de git 
+# http://askubuntu.com/questions/16728/hide-current-working-directory-in-terminal
+# http://askubuntu.com/questions/442101/how-to-automatically-set-terminal-title-to-directory-name-without-path
+# http://askubuntu.com/questions/232086/remove-full-path-from-terminal
+# https://www.leaseweb.com/labs/2013/08/git-tip-show-your-branch-name-on-the-linux-prompt/
+# http://martinvalasek.com/blog/current-git-branch-name-in-command-prompt
+# http://askubuntu.com/questions/127056/where-is-bashrc
 
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
+# For MacBook Pro 2015
+# http://osxdaily.com/2013/02/05/improve-terminal-appearance-mac-os-x/
+# https://www.cyberciti.biz/faq/apple-mac-osx-terminal-color-ls-output-option/
+
+function parse_git_branch () {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+ 
+BLACK="\[\033[0;30m\]"
+RED="\[\033[0;31m\]"
+GREEN="\[\033[0;32m\]"
+YELLOW="\[\033[0;33m\]"
+BLUE="\[\033[0;34m\]"
+MAGEN="\[\033[0;35m\]"
+CYAN="\[\033[0;36m\]"
+WHITE="\[\033[0;37m\]"
+NOCOLOR="\[\033[0m\]"
+ 
+PS1="$YELLOW\u@$GREEN\h:$MAGEN\W$BLUE\$(parse_git_branch)$NOCOLOR\$ "
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
 
 export CLICOLOR=1
-export LSCOLORS=GxFxCxDxBxegedabagaced
+export LSCOLORS=gxfxbxdxcxegedabagacad
+alias gl="git log --oneline"
+alias glr="git log --format=reference"
+alias glf="git log --pretty='format:%C(auto)%h (%s | %an | %as)'"
+# alias glc="git log --pretty='format:%C(auto)%h (%Cred%s | %Cgreen%an | %Cblue%as)'"
+alias glc="git log --pretty='format:%C(auto)%h (%Cblue%as%Creset | %Cgreen%an%Creset | %Cred%s%Creset) %C(auto)%d'"
+alias gs="git status -bs"
+alias gd="git diff -p --stat"
+alias gt="git tag --sort=-creatordate"
+alias l.='ls -alGhd .* --color=auto'
+alias ls='ls -GFh --color'
+alias ll='ls -alGh --color'
+alias lll='find ./  -printf "%f\n"'
 
-txtred='\e[0;31m' # Red
-txtgrn='\e[0;32m' # Green
-bldgrn='\e[1;32m' # Bold Green
-bldpur='\e[1;35m' # Bold Purple
-txtrst='\e[0m'    # Text Reset
 
-emojis=("👾" "🌐" "🎲" "🌍" "🐉" "🌵")
+# User specific environment and startup programs
 
-EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
+PATH=$PATH:$HOME/bin
 
-print_before_the_prompt () {
-    dir=$PWD
-    home=$HOME
-    dir=${dir/"$HOME"/"~"}
-    printf "\n $txtred%s: $bldpur%s $txtgrn%s\n$txtrst" "$HOST_NAME" "$dir" "$(vcprompt)"
-}
-
-PROMPT_COMMAND=print_before_the_prompt
-PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-PS1="$EMOJI >"
-
-function mkcd()
-{
-	mkdir $1 && cd $1
-}
-
-# -------
-# Aliases
-# -------
-alias l="ls" # List files in current directory
-alias ll="ls -al" # List all files in current directory in long list format
-alias o="open ." # Open the current directory in Finder
-
-# ----------------------
-# Git Aliases
-# ----------------------
-alias gaa='git add .'
-alias gcm='git commit -m'
-alias gpsh='git push'
-alias gss='git status -s'
-alias gs='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
+export PATH
