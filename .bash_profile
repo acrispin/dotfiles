@@ -1,3 +1,6 @@
+# Backup default .bash_profile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 # seccion adicionada al final, ubicacion: /home/user/
 # personalizado para mostrar el nombre del branch en un repositorio de git 
 # http://askubuntu.com/questions/16728/hide-current-working-directory-in-terminal
@@ -46,8 +49,10 @@ export LSCOLORS=gxfxbxdxcxegedabagacad
 alias l.='ls -alGhd .* --color=auto'
 alias ls='ls -GFh --color'
 alias ll='ls -alGh --color'
-alias lll='find ./  -printf "%f\n"'
+# alias lll='find ./  -printf "%f\n"'
 alias o="open ." # Open the current directory in Finder
+# brew install findutils (Macpro)
+alias lll='gfind ./ -type f -printf "%f\n"'
 
 # ----------------------
 # Git Aliases
