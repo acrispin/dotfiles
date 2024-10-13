@@ -1,36 +1,20 @@
-# Backup default .bash_profile
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# seccion adicionada al final, ubicacion: /home/user/
+# personalizado para mostrar el nombre del branch en un repositorio de git 
+# http://askubuntu.com/questions/16728/hide-current-working-directory-in-terminal
+# http://askubuntu.com/questions/442101/how-to-automatically-set-terminal-title-to-directory-name-without-path
+# http://askubuntu.com/questions/232086/remove-full-path-from-terminal
+# https://www.leaseweb.com/labs/2013/08/git-tip-show-your-branch-name-on-the-linux-prompt/
+# http://martinvalasek.com/blog/current-git-branch-name-in-command-prompt
+# http://askubuntu.com/questions/127056/where-is-bashrc
 
-source ~/.nvm/nvm.sh
-nvm use stable
-shopt -s autocd
-shopt -s histappend
-
-export PATH=$PATH:$HOME/bin
-
-export HISTSIZE=5000
-export HISTFILESIZE=10000
-
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
-
-export CLICOLOR=1
-export LSCOLORS=GxFxCxDxBxegedabagaced
-
-txtred='\e[0;31m' # Red
-txtgrn='\e[0;32m' # Green
-bldgrn='\e[1;32m' # Bold Green
-bldpur='\e[1;35m' # Bold Purple
-txtrst='\e[0m'    # Text Reset
-
-# emojis=("👾" "🌐" "🎲" "🌍" "🐉" "🌵")
-
-# EMOJI=${emojis[$RANDOM % ${#emojis[@]} ]}
+# For MacBook Pro 2015
+# http://osxdaily.com/2013/02/05/improve-terminal-appearance-mac-os-x/
+# https://www.cyberciti.biz/faq/apple-mac-osx-terminal-color-ls-output-option/
 
 function parse_git_branch () {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
-
+ 
 BLACK="\[\033[0;30m\]"
 RED="\[\033[0;31m\]"
 GREEN="\[\033[0;32m\]"
@@ -40,23 +24,21 @@ MAGEN="\[\033[0;35m\]"
 CYAN="\[\033[0;36m\]"
 WHITE="\[\033[0;37m\]"
 NOCOLOR="\[\033[0m\]"
+ 
+PS1="$YELLOW\u@$GREEN\h:$MAGEN\W$BLUE\$(parse_git_branch) \n$NOCOLOR\$ "
 
-print_before_the_prompt () {
-    dir=$PWD
-    home=$HOME
-    dir=${dir/"$HOME"/"~"}
-    # printf "\n $txtred%s: $bldpur%s $txtgrn%s\n$txtrst" "$HOST_NAME" "$dir""$(parse_git_branch)"
-    printf "$YELLOW\u@$GREEN\h:$MAGEN\W$BLUE\$(parse_git_branch)$NOCOLOR\$ "
-}
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    # PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
 
-PROMPT_COMMAND=print_before_the_prompt
-PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-PS1="$ "
-
-function mkcd()
-{
-	mkdir $1 && cd $1
-}
+export CLICOLOR=1
+export LSCOLORS=gxfxbxdxcxegedabagacad
 
 # -------
 # Aliases
@@ -79,3 +61,11 @@ alias gs="git status -bs"
 alias gd="git diff -p --stat"
 alias gt="git tag --sort=-creatordate"
 alias gs2='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
+
+# 
+export HISTSIZE=5000
+export HISTFILESIZE=10000
+
+# User specific environment and startup programs
+PATH=$PATH:$HOME/bin
+export PATH
